@@ -22,11 +22,11 @@ async function postCsvTasks() {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
-          body: JSON.stringify({
-            title,
-            description
-          })
-        }
+        },
+        body: JSON.stringify({
+          title,
+          description
+        })
       })
 
       console.log('Postado com sucesso via CSV')
