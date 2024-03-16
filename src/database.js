@@ -18,6 +18,10 @@ export class Database {
     fs.writeFile(databasepath, JSON.stringify(this.#database))
   }
 
+  select(table){
+    return JSON.stringify(this.#database[table])
+  }
+
   insert(table, data){
     if(Array.isArray(this.#database[table])){
       this.#database[table].push(data)

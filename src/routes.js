@@ -10,7 +10,9 @@ export const routes = [
     method: "GET",
     path: "/tasks",
     handler: (req, res) => {
-      return res.end('Estou aqui')
+      const data = database.select('tasks')
+      console.log(data)
+      res.end(data)
     }
   },
   {
@@ -31,13 +33,9 @@ export const routes = [
         
   
         database.insert('tasks', task)
-        res.end('Task criada com sucesso')
+        res.writeHead(201).end('Task criada com sucesso')
         return
-      } 
-      /*
-      return res.writeHead(201).end()
-      */
-
+      }
     }
   },
   {
