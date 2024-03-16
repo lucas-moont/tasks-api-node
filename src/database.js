@@ -21,11 +21,11 @@ export class Database {
   insert(table, data){
     if(Array.isArray(this.#database[table])){
       this.#database[table].push(data)
+      console.log(this.#database)    
+      this.#persist()
       return 
     }
 
     this.#database[table] = [data]
-
-    this.#persist()
   }
 }

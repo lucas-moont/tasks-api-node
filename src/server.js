@@ -10,7 +10,7 @@ const server = http.createServer(async (req, res) => {
   })
 
   if(route){
-      route.handler(req, res)
+    route.handler(req, res)
   }
 })
 
