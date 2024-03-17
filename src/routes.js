@@ -1,23 +1,23 @@
 import {randomUUID} from 'node:crypto'
 import { Database } from './database.js'
-const timeElapsed = Date.now()
-const today = new Date(timeElapsed)
+let timeElapsed = Date.now()
+let today = new Date(timeElapsed)
+import { buildRoutePath } from './utils/buildRoutePath.js'
 
 const database = new Database()
 
 export const routes = [
   {
     method: "GET",
-    path: "/tasks",
+    path: buildRoutePath("/tasks"),
     handler: (req, res) => {
       const data = database.select('tasks')
-      console.log(data)
       res.end(data)
     }
   },
   {
     method: "POST", 
-    path: "/tasks",
+    path: buildRoutePath("/tasks"),
     handler: (req, res) => {
       if(req.body.title && req.body.description){
         const {title, description} = req.body
@@ -34,27 +34,38 @@ export const routes = [
   
         database.insert('tasks', task)
         res.writeHead(201).end('Task criada com sucesso')
-        return
       }
     }
   },
   {
     method: "PUT",
-    path: "/tasks/:id",
+    path: buildRoutePath("/tasks/:id"),
     handler: (req, res) => {
-      return res.end("Estou no put")
+      let {id} = req.params
+      let data = req.body
+
+      timeElapsed = Date.now()
+      today = new Date(timeElapsed)
+
+      let updated_at = today.toLocaleString()
+      
+      let wasUpdated = database.update('tasks', id, data, updated_at)
+      if (wasUpdated){
+        return res.writeHead(204).end()
+      }
+      return res.writeHead(404).end('Você precisa enviar pelo menos o título ou a descrição')
     }
   },
   {
     method: "DELETE",
-    path: "/tasks/:id",
+    path: buildRoutePath("/tasks/:id"),
     handler: (req, res) => {
       return res.end('Estou no delete')
     }
   },
   {
     method: "PATCH",
-    path: "/tasks/:id/complete",
+    path: buildRoutePath("/tasks/:id/complete"),
     handler: (req, res) => {
       return res.end('Estou no PATCH.')
     }
