@@ -73,7 +73,19 @@ export const routes = [
     method: "PATCH",
     path: buildRoutePath("/tasks/:id/complete"),
     handler: (req, res) => {
-      return res.end('Estou no PATCH.')
+      const {id} = req.params
+
+      timeElapsed = Date.now()
+      today = new Date(timeElapsed)
+
+      let completed_at = today.toLocaleString()
+
+      let completedReturn = database.complete('tasks', id, completed_at)
+      if(completedReturn.error){
+        return res.writeHead(404).end(completedReturn.message)
+      }
+
+      return res.writeHead(200).end(completedReturn.message)
     }
   }
 ]

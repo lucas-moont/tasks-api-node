@@ -56,7 +56,7 @@ export class Database {
         ...this.#database[table][rowIndex],
         id,
         ...data,
-        updated_at: updated_at,
+        updated_at,
       };
       this.#persist();
       return true;
@@ -74,5 +74,29 @@ export class Database {
     }
 
     return false
+  }
+
+  complete(table, id, completed_at){
+    let rowIndex = this.#database[table].findIndex(row => row.id === id)
+    
+    if(rowIndex > -1){
+      if(this.#database[table][rowIndex].completed_at === ''){
+        this.#database[table][rowIndex].completed_at = completed_at
+        return {
+          error: false,
+          message: 'Task concluída com sucesso'
+        }
+      }else{
+        return {
+          error: true,
+          message: 'Task já foi concluída'
+        }     
+      }
+    }else{
+      return {
+        error: true,
+        message: 'Task não existe'
+      }
+    }
   }
 }
